@@ -149,9 +149,19 @@ Or, if installed from source:
 
 ### Claude Code
 
-In Claude Code, the server can be configured similarly to Claude Desktop.
+You can add the Qase MCP server to Claude Code using the CLI command:
 
-Add to your MCP configuration:
+```bash
+claude mcp add qase -- npx -y @qase/mcp-server
+```
+
+Set the required environment variable:
+
+```bash
+export QASE_API_TOKEN=your_api_token_here
+```
+
+Alternatively, add a `.mcp.json` file to your project root for automatic project-scoped configuration:
 
 ```json
 {
@@ -166,6 +176,60 @@ Add to your MCP configuration:
   }
 }
 ```
+
+You can also use the `--scope` flag to choose where the configuration is stored:
+
+```bash
+# Project-scoped (saved in .mcp.json)
+claude mcp add --scope project qase -- npx -y @qase/mcp-server
+
+# User-scoped (available in all projects)
+claude mcp add --scope user qase -- npx -y @qase/mcp-server
+```
+
+### OpenAI Codex CLI
+
+Add a `.codex/config.json` file to your project root:
+
+```json
+{
+  "mcpServers": {
+    "qase": {
+      "command": "npx",
+      "args": ["-y", "@qase/mcp-server"],
+      "env": {
+        "QASE_API_TOKEN": "your_api_token_here"
+      }
+    }
+  }
+}
+```
+
+Set the required environment variable before running Codex:
+
+```bash
+export QASE_API_TOKEN=your_api_token_here
+```
+
+### OpenCode
+
+Add an `opencode.json` file to your project root (or `~/.config/opencode/opencode.json` for global configuration):
+
+```json
+{
+  "mcp": {
+    "qase": {
+      "type": "local",
+      "command": ["npx", "-y", "@qase/mcp-server"],
+      "environment": {
+        "QASE_API_TOKEN": "your_api_token_here"
+      }
+    }
+  }
+}
+```
+
+> **Note:** OpenCode uses a different format from other MCP clients — the command and args are combined into a single `command` array, env vars go under `environment`, and servers are nested under `mcp` (not `mcpServers`).
 
 ## Usage Examples
 
